@@ -291,6 +291,16 @@ make lint
 
 Go 1.27.3 or later, and Node 22 for the web UI. The CGO build needs a C compiler for the Tree-sitter grammars. Images are built with ko, and the release builds the UI first.
 
+## Patch line `swl/main`
+
+This fork, `scratchwork-labs/x-ray`, carries a patch line for the Scratchwork Labs cluster. Its `main` mirrors `triageagent-dev/x-ray` `main` (fast-forward only, never a commit of ours).
+
+- `swl/main` is an upstream release plus our patches. It starts at the release tag the cluster runs, and each patch is one commit on top.
+- Each new upstream release is merged into `swl/main` and the result is tagged `vX.Y.Z-swl.N`: `X.Y.Z` is the upstream release, `N` counts from 0 and goes up with each change to our patches on that release. A tag is never moved or re-pushed.
+- A patch that upstream has merged is dropped at the merge of the release that contains it, so `swl/main` keeps only what upstream does not have yet.
+- Every patch is listed, with its evidence, fork commit, upstream issue or PR and status, in `swl-docs` [`docs/upstream/x-ray.md`](https://github.com/scratchwork-labs/swl-docs/blob/main/docs/upstream/x-ray.md). Patches go upstream from there.
+- GitHub Actions are off in this fork: nothing here builds, releases or publishes. The code-graph builder image (`swl-ci-catalog` `images/xray-graph-builder`) builds `xray-parser` from a `vX.Y.Z-swl.N` tag, pinned by commit SHA.
+
 ## License
 
 [Apache License 2.0](LICENSE). Third-party notices are in [NOTICE](NOTICE).
